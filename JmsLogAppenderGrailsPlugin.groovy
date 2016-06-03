@@ -54,7 +54,6 @@ Adds a JMS log appender to the 'grails.app' logger.  The JMS log appender as it'
 
         jmsConnectionFactory(CachingConnectionFactory) {
             targetConnectionFactory = { ActiveMQConnectionFactory cf ->
-                //todo: make brokerURL configurable
                 brokerURL = application?.mergedConfig?.jmsLogAppender?.brokerURL ?: 'tcp://localhost:61716'
             }
             sessionCacheSize = 10
@@ -82,8 +81,7 @@ Adds a JMS log appender to the 'grails.app' logger.  The JMS log appender as it'
         // Use the fileAppender as a default appender
         def fileAppender = ctx.getBean("fileAppender")
         if (fileAppender) {
-            //todo: replace with config.fileAppender.filename
-            fileAppender.setFile(application?.mergedConfig?.jmsLogAppender?.fileAppender?.filename ?: "/apps/local/uPayPostBackHandler/logs/app.log", true, true, 1024)
+            fileAppender.setFile(application?.mergedConfig?.jmsLogAppender?.fileAppender?.filename ?: "app.log", true, true, 1024)
             Logger.rootLogger.addAppender(fileAppender)
         }
 
