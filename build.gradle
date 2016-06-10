@@ -1,0 +1,75 @@
+buildscript {
+    ext {
+        grailsVersion = project.grailsVersion
+    }
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.grails.org/grails/core" }
+    }
+    dependencies {
+        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.8.2"
+    }
+}
+
+version "3.0-SNAPSHOT"
+group "org.grails.plugins"
+
+apply plugin:"idea"
+apply plugin:"org.grails.grails-plugin"
+apply plugin:"org.grails.grails-plugin-publish"
+apply plugin:"asset-pipeline"
+
+ext {
+    grailsVersion = project.grailsVersion
+    gradleWrapperVersion = project.gradleWrapperVersion
+}
+
+sourceCompatibility = targetCompatibility = 1.7
+
+repositories {
+    mavenLocal()
+    maven { url "https://repo.grails.org/grails/core" }
+    maven { url "https://repo1.maven.org/maven2" }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.grails:grails-bom:$grailsVersion"
+    }
+    applyMavenExclusions false
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-logging"
+    compile 'org.springframework.boot:spring-boot-starter-activemq:1.4.0.BUILD-SNAPSHOT'
+    compile "org.grails:grails-core"
+    compile "org.springframework.boot:spring-boot-starter-tomcat"
+    compile "org.grails:grails-dependencies"
+    compile "org.grails:grails-plugin-services"
+    console "org.grails:grails-console"
+
+    testCompile "org.grails:grails-plugin-testing"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = gradleWrapperVersion
+}
+grailsPublish {
+    // TODO: Provide values here
+    user = 'thiles'
+    key = 'key'
+    githubSlug = 'EduShareOntario/jms-log-appender-grailsPlugin'
+    license {
+        name = 'Apache-2.0'
+    }
+    title = "Jms Log Appender Plugin"
+    desc = "Adds a JMS log appender to the 'grails.app' logger.  The JMS log appender as it's name implies appends the loggingEvents to a JMS queue."
+    developers = [thiles:"Todd Hiles"]
+    portalUser = ""
+    portalPassword = ""    
+}
+
+assets {
+    packagePlugin = true
+}
