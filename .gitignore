@@ -1,6 +1,4 @@
 *.zip.*
-*.iml
-/.idea
 *.iws
 *Db.properties
 *Db.script

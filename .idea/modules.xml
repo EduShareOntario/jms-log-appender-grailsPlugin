@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jms-log-appender-grailsPlugin.iml" filepath="$PROJECT_DIR$/jms-log-appender-grailsPlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jms-log-appender-grailsPlugin-grailsPlugins.iml" filepath="$PROJECT_DIR$/jms-log-appender-grailsPlugin-grailsPlugins.iml" />
+    </modules>
+  </component>
+</project>
