@@ -1,4 +1,7 @@
+import ch.qos.logback.ext.spring.DelegatingLogbackAppender
 import grails.plugins.*
+import logback.appender.LogbackJmsAppender
+import logback.appender.LogbackLoggerNameFilter
 import org.apache.activemq.command.ActiveMQQueue
 
 class JmsLogAppenderGrailsPlugin extends Plugin {
@@ -7,13 +10,14 @@ class JmsLogAppenderGrailsPlugin extends Plugin {
     def author = "Todd Hiles"
     def authorEmail = "2toddhiles@gmail.com"
     def description = '''\
-Adds a JMS log appender to the 'grails.app' logger.  The JMS log appender as it's name implies appends the loggingEvents to a JMS queue.
+Defines a bean named jmsLogbackAppender for use within the logback config. eg. appender('logbackJmsAppender', DelegatingLogbackAppender).
 '''
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/jms-log-appender"
 
     // Extra (optional) plugin metadata
 
+    def dependsOn = [ "logback-ext-spring" : '0.1.2' ]
     // License: one of 'APACHE', 'GPL2', 'GPL3'
 //    def license = "APACHE"
 
@@ -32,6 +36,18 @@ Adds a JMS log appender to the 'grails.app' logger.  The JMS log appender as it'
     Closure doWithSpring() {
         { ->
             loggingEventQueue(ActiveMQQueue, "loggingEvent")
+            // Important: This just sets up the bean "logbackJmsAppender", the dependent application
+            // must configure 'logback' with an appender of type DelegatingLogbackAppender.
+            // The DelegatingLogbackAppender will cache log events until the spring application
+            // context and it's beans are ready and will then delegate to "a bean with the same name"
+            // as the appender!
+            // eg. appender('logbackJmsAppender', DelegatingLogbackAppender)
+            //todo: make this bean name configurable.
+            logbackJmsAppender(LogbackJmsAppender) {
+                filter(LogbackLoggerNameFilter) {
+                    excludeLoggerNames = ["grails.app.services.grails.plugin.jms", "org.springframework.messaging.core"]
+                }
+            }
         }
     }
 

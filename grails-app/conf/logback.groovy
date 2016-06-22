@@ -1,3 +1,4 @@
+import ch.qos.logback.ext.spring.DelegatingLogbackAppender
 import grails.util.BuildSettings
 import grails.util.Environment
 
@@ -8,7 +9,10 @@ appender('STDOUT', ConsoleAppender) {
     }
 }
 
+appender('jmsLogbackAppender', DelegatingLogbackAppender)
+
 root(ERROR, ['STDOUT'])
+
 
 def targetDir = BuildSettings.TARGET_DIR
 if (Environment.isDevelopmentMode() && targetDir) {
